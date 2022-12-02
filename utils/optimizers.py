@@ -213,9 +213,6 @@ class AdamOptim(Optimizer):
             a = learning_rate/((velocities[i]/(1-beta2**t))**0.5+self.eps)
             b = momentums[i]/(1-beta1**t)
             params[i] = params[i] - np.multiply(a,b)
-
-
-
         ###################################################
         #               END OF YOUR CODE                  #
         ###################################################
