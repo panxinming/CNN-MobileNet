@@ -134,6 +134,9 @@ class MLP:
             # END OF DROPOUT                              #
             ###############################################
 
+        # Convolutional Layer
+
+
         # The last layer
         w = params["weight_{}".format(num_layers - 1)]
         b = params["bias_{}".format(num_layers - 1)]
