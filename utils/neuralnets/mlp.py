@@ -21,7 +21,7 @@ class MLP:
     '''
 
     def __init__(self, input_dim=3072, hidden_dims=[200, 200], num_classes=10, weight_scale=1e-2,
-                 l2_reg=0.0, use_bn=None, dropout_config=None, momentum=0.0):
+                 l2_reg=0.0, use_bn=None, dropout_config=None, momentum=0.0,pad=1, stride=1):
         '''
         Inputs:
         - weight_scale: (float) for layer weight initialization
@@ -40,6 +40,8 @@ class MLP:
 
         self.l2_reg = l2_reg
         self.use_bn = use_bn
+        self.pad = pad
+        self.stride = stride
         bn_params = []
         self.dropout_config = dropout_config
 
@@ -135,7 +137,9 @@ class MLP:
             ###############################################
 
         # Convolutional Layer
-
+        pad = self.pad
+        stride = self.stride
+        x = conv2d_forward(x,W,b,pad,stride)
 
         # The last layer
         w = params["weight_{}".format(num_layers - 1)]
@@ -208,6 +212,11 @@ class MLP:
             ###############################################
             # END OF BATCH NORMALIZATION                  #
             ###############################################
+
+        # convolutional backward
+        pad = self.pad
+        stride = self.stride
+        dx, dw, db = conv2d_backward(dx, dx, dw, db, pad, stride)
 
             # Affine backward
             dx, dw, db = affine_backward(dx, cache["affine_{}".format(j)])
