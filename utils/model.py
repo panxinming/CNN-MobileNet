@@ -25,7 +25,7 @@ class Basic_CNN:
         self.model.add(Flatten())
         self.model.add(Dense(self.num_classes, activation="softmax"))
         
-    def train(self,optimizer,loss='sparse_categorical_crossentropy',val_split = 0.2,
+    def train(self,x_train,y_train,optimizer,loss='sparse_categorical_crossentropy',val_split = 0.2,
              epochs = 2, batch_size = 256):
         
         self.model.compile(optimizer=optimizer,loss=loss,metrics=['accuracy'])
@@ -81,7 +81,7 @@ class mobilenet:
         self.model.add(Flatten())
         self.model.add(Dense(self.num_classes, activation="softmax"))
         
-    def train(self,optimizer,loss='sparse_categorical_crossentropy',val_split = 0.2,
+    def train(self,x_train,y_train,optimizer,loss='sparse_categorical_crossentropy',val_split = 0.2,
              epochs = 2, batch_size = 256):
         
         self.model.compile(optimizer=optimizer,loss=loss,metrics=['accuracy'])
