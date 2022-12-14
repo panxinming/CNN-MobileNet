@@ -36,3 +36,35 @@ def mobilenet(input_shape, n_classes):
   
     model = Model(input_1, output)
     return model
+
+
+
+# Normal CNN
+
+def CNN(input_shape, n_classes):  
+    input_1 = Input(input_shape)
+
+    x = Conv2D(32, 3, strides=2, padding='same')(input_1)
+    x = BatchNormalization()(x)
+    x = ReLU()(x)
+
+    x = CNN_block(x, 64)
+    x = CNN_block(x, 128, 2)
+    x = CNN_block(x, 128)
+
+    x = CNN_block(x, 256, 2)
+    x = CNN_block(x, 256)
+
+    x = CNN_block(x, 512, 2)
+    for _ in range(5):
+        x = CNN_block(x, 512)
+
+    x = CNN_block(x, 1024, 2)
+    x = CNN_block(x, 1024)
+  
+    x = GlobalAvgPool2D()(x)
+  
+    output = Dense(n_classes, activation='softmax')(x)
+  
+    model = Model(input_1, output)
+    return model
