@@ -9,6 +9,9 @@ import tensorflow as tf
 #tiny-imagenet-200 data set has 500 images for each class in the training data, and the training data have 200 classes.
 #For validation data, it has 50 images for each class and the total number of classes is 200.
 
+
+tiny_img200_label = {}
+
 def load_data(dataset, stage, dir):
 	image_list = []
 	label_list = []
@@ -18,9 +21,13 @@ def load_data(dataset, stage, dir):
 		Each sub_dir is a folder, and the folder's name is the class (Y). 
 		All the files in the folder is images (our training data X).
 		'''
+
 		if(stage=='train'):
+			label_id = 0
 			#loading training images and labels
 			for sub_dir in os.listdir(dir):
+				tiny_img200_label[sub_dir] = label_id
+				label_id += 1
 			    sub_dir_name=os.path.join(dir, sub_dir)
 			    sub_dir_name=os.path.join(sub_dir_name, "images")
 			    #print("Reading folder {}".format(sub_dir))
@@ -143,9 +150,10 @@ def clean_data(dataset, image_list, label_list):
 	#                             'constant',constant_values = (0))
 	        
 	        three_channel_images.append(np.array(img))
-	        clean_label_list.append(label_list[i][1:])
-	        #we need to eliminate the first char 'n', otherwise we will get a ValueError and cannot call tf.one_hot
+	        clean_label_list.append(tiny_img200_label[label_list[i]])
 	X = np.array(three_channel_images)
-	Y = tf.one_hot(np.array(clean_label_list), depth = 200)
+	#Y = tf.one_hot(np.array(clean_label_list), depth = 200)
+	Y = np.array(clean_label_list)
+	Y = tf.one_hot(Y, depth = 200)
 	print(X.shape, Y.shape)
 	return X, Y
