@@ -11,8 +11,8 @@ def mobilenet_block(x, f, s=1, alpha = 1):
     return x
 
 
-def CNN_block(x, f, s=1, alpha = 1):
-    x = Conv2D(int(alpha * 3), strides=s, padding='same')(x)
+def Conv_block(x, f, s=1):
+    x = Conv2D(3, strides=s, padding='same')(x)
     x = BatchNormalization()(x)
     x = ReLU()(x)
 

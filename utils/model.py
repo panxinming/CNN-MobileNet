@@ -48,19 +48,19 @@ def CNN(input_shape, n_classes):
     x = BatchNormalization()(x)
     x = ReLU()(x)
 
-    x = CNN_block(x, 64)
-    x = CNN_block(x, 128, 2)
-    x = CNN_block(x, 128)
+    x = Conv_block(x, 64)
+    x = Conv_block(x, 128, 2)
+    x = Conv_block(x, 128)
 
-    x = CNN_block(x, 256, 2)
-    x = CNN_block(x, 256)
+    x = Conv_block(x, 256, 2)
+    x = Conv_block(x, 256)
 
-    x = CNN_block(x, 512, 2)
+    x = Conv_block(x, 512, 2)
     for _ in range(5):
-        x = CNN_block(x, 512)
+        x = Conv_block(x, 512)
 
-    x = CNN_block(x, 1024, 2)
-    x = CNN_block(x, 1024)
+    x = Conv_block(x, 1024, 2)
+    x = Conv_block(x, 1024)
   
     x = GlobalAvgPool2D()(x)
   
