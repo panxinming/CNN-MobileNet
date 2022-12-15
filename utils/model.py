@@ -9,26 +9,26 @@ from utils.MobileNet_Cell import *
 
 
 # implement mobile net from scratch
-def mobilenet(input_shape, n_classes):  
+def mobilenet(input_shape, n_classes, alpha = 1):  
     input_1 = Input(input_shape)
 
     x = Conv2D(32, 3, strides=2, padding='same')(input_1)
     x = BatchNormalization()(x)
     x = ReLU()(x)
 
-    x = mobilenet_block(x, 64)
-    x = mobilenet_block(x, 128, 2)
-    x = mobilenet_block(x, 128)
+    x = mobilenet_block(x, 64, alpha = alpha)
+    x = mobilenet_block(x, 128, 2, alpha = alpha)
+    x = mobilenet_block(x, 128, alpha = alpha)
 
-    x = mobilenet_block(x, 256, 2)
-    x = mobilenet_block(x, 256)
+    x = mobilenet_block(x, 256, 2, alpha = alpha)
+    x = mobilenet_block(x, 256, alpha = alpha)
 
-    x = mobilenet_block(x, 512, 2)
+    x = mobilenet_block(x, 512, 2, alpha = alpha)
     for _ in range(5):
-        x = mobilenet_block(x, 512)
+        x = mobilenet_block(x, 512, alpha = alpha)
 
-    x = mobilenet_block(x, 1024, 2)
-    x = mobilenet_block(x, 1024)
+    x = mobilenet_block(x, 1024, 2, alpha = alpha)
+    x = mobilenet_block(x, 1024, alpha = alpha)
   
     x = GlobalAvgPool2D()(x)
   

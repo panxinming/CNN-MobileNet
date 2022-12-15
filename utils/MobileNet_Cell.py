@@ -12,7 +12,7 @@ def mobilenet_block(x, f, s=1, alpha = 1):
 
 
 def Conv_block(x, f, s=1):
-    x = Conv2D(3, strides=s, padding='same')(x)
+    x = Conv2D(f, 3, strides=s, padding='same')(x)
     x = BatchNormalization()(x)
     x = ReLU()(x)
 
