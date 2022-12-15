@@ -28,14 +28,14 @@ def load_data(dataset, stage, dir):
 			for sub_dir in os.listdir(dir):
 				tiny_img200_label[sub_dir] = label_id
 				label_id += 1
-			    sub_dir_name=os.path.join(dir, sub_dir)
-			    sub_dir_name=os.path.join(sub_dir_name, "images")
+				sub_dir_name=os.path.join(dir, sub_dir)
+				sub_dir_name=os.path.join(sub_dir_name, "images")
 			    #print("Reading folder {}".format(sub_dir))
-			    for file in os.listdir(sub_dir_name):
-			        filename = os.fsdecode(file)
-			        image_list.append(np.array(Image.open(os.path.join(sub_dir_name,file))))
+				for file in os.listdir(sub_dir_name):
+					filename = os.fsdecode(file)
+					image_list.append(np.array(Image.open(os.path.join(sub_dir_name,file))))
 			        #here we only save the matrix in the list rather than the original image file
-			        label_list.append(str(sub_dir))
+					label_list.append(str(sub_dir))
 			'''
 			The tiny-imagenet-200 data set don't give labels for test data, so we cannot
 			use them for experiments. Instead, we use the validation data set as our test data here, 
@@ -61,8 +61,8 @@ def load_data(dataset, stage, dir):
 			#loading validation images
 			val_image_dir = os.path.join(dir,"images")
 			for file in os.listdir(val_image_dir):
-			    filename = os.fsdecode(file)
-			    image_list.append(np.array(Image.open(os.path.join(val_image_dir,file))))
+				filename = os.fsdecode(file)
+				image_list.append(np.array(Image.open(os.path.join(val_image_dir,file))))
 
 			#loading corresponding labels
 			val_label_file = os.path.join(dir,"val_annotations.txt")
@@ -88,15 +88,13 @@ def split_trainset(dataset,train_data,train_labels):
 		for i in range(len(train_data)):
 			cnt = cnt+1
 			if(cnt<=450):
-
 				train_data_list.append(train_data[i])
 				train_label_list.append(train_labels[i])
 
 			elif(cnt<=500):
-
 				val_data_list.append(train_data[i])
 				val_label_list.append(train_labels[i])
-
+			
 			else: # when cnt reaches 501, it means a new class, 
 				cnt = 0
 		return train_data_list, train_label_list, val_data_list, val_label_list
@@ -114,8 +112,8 @@ def cal_prop(dataset, image_list):
 		single_channel_ind = []
 		standard_shape = (64,64,3)
 		for i in range(len(image_list)):
-		    if(image_list[i].shape!=standard_shape):
-		        single_channel_ind.append(i)
+			if(image_list[i].shape!=standard_shape):
+				single_channel_ind.append(i)
 		print("The total number of single channel images in the training images is ",
 			len(single_channel_ind), " ,and the proportion of them is ", 
 			len(single_channel_ind)/len(image_list))
@@ -133,14 +131,14 @@ def clean_data(dataset, image_list, label_list):
 	three_channel_images = []
 	clean_label_list = []
 	for i in range(len(image_list)):
-	    if(i in single_channel_ind):
-	        continue
-	    else:
+		if(i in single_channel_ind):
+			continue
+		else:
 	        #we need resize our images' shape into (224,224,3) to fit mobilenet's input size
 	        
 	        #Method 1: Image.resize()
-	        img = Image.fromarray(image_list[i])
-	        img = img.resize((224,224),Image.BILINEAR)
+			img = Image.fromarray(image_list[i])
+			img = img.resize((224,224),Image.BILINEAR)
 	        
 	#         #Method 2: zero padding
 	#         img = image_list[0]
@@ -149,11 +147,10 @@ def clean_data(dataset, image_list, label_list):
 	#             img_pad = np.pad(img[:,:,i],((add_,add_),(add_,add_)),
 	#                             'constant',constant_values = (0))
 	        
-	        three_channel_images.append(np.array(img))
-	        clean_label_list.append(tiny_img200_label[label_list[i]])
+			three_channel_images.append(np.array(img))
+			clean_label_list.append(tiny_img200_label[label_list[i]])
 	X = np.array(three_channel_images)
-	#Y = tf.one_hot(np.array(clean_label_list), depth = 200)
 	Y = np.array(clean_label_list)
-	Y = tf.one_hot(Y, depth = 200)
+	#Y = tf.one_hot(Y, depth = 200)
 	print(X.shape, Y.shape)
 	return X, Y
